@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src='https://unpkg.com/react@18/umd/react.development.js'></script>
+    <script crossorigin src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'>
+    </script><script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
+    
+</head>
+<body>
+    <!--
+        JSX는 편리한 문법이지만 몇가지 규칙을 준수해야한다.
+        ReactElement는 하나의 DOM트리를 구성하는 방식이기에 여러 개의 부모 노드가 존재하면 안된다.
+        따라서 동일레벨의 노드들이 연달아 정의되는 경우 문법적인 에러가 발생한다.
+        여러 형제 레벨의 엘리먼트를 정의해야 하는 경우 하나의 부모 엘리먼트로(div 태그와 같은) 감싸야하는데
+        div요소 같은 실질적인 요소를 사용하지 않으려면 Fragment를 이용할 수 있다.
+    -->
+    <div id='root'></div>
+    
+    <script type='text/babel'>
+        
+        const user = {
+            name: 'Gildong',
+            phone: '010-1234-5678'
+        }
+
+        // 1. 최상위 엘리먼트가 두 개 이상이면 에러가 발생한다(하나의 돔 트리만 생성해야한다.)
+        // const element = (
+        //     <h1>Hello, { user.name}</h1>
+        //     <h3>phone : {user.phone}</h3>
+        // );
+
+        // 2. <div>태그로 감싸서 하나의 돔 트리를 생성할 수 있도록한다. 
+        // const element = (
+        //     <div>
+        //         <h1>Hello, { user.name}</h1>
+        //         <h3>phone : {user.phone}</h3>
+        //     </div>
+        // );
+
+        // 3. <React.Fragment>로 감싸서 형식상의 돔 트리상 상위 앨리먼트를 만들어준다.
+        // const element = (
+        //     <React.Fragment>
+        //         <h1>Hello, { user.name}</h1>
+        //         <h3>phone : {user.phone}</h3>
+        //     </React.Fragment>
+        // )
+
+        // 4. React라이브러리로부터 Fragment객체만 비구조화 할당을 해주면 React.을 생략할 수 있다.
+        // const { Fragment } = React;
+        // const element = (
+        //     <Fragment >
+        //         <h1>Hello, { user.name}</h1>
+        //         <h3>phone : {user.phone}</h3>
+        //     </Fragment>
+        // )
+
+        // 5. React.Fragment의 축약 문법 <></>로 감싸서 사용할 수 있다.(Babel 17이상부터 지원한ㄷ)
+        const element = (
+            <>
+                <h1>Hello, { user.name}</h1>
+                <h3>phone : {user.phone}</h3>
+            </>
+        )
+
+        ReactDOM.createRoot(document.getElementById('root')).render(element);
+    </script>
+</body>
+</html>

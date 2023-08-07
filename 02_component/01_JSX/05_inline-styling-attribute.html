@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src='https://unpkg.com/react@18/umd/react.development.js'></script>
+    <script crossorigin src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'>
+    </script><script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
+    
+</head>
+<body>
+    <!-- 리액트에서 DOM요소에 스타일을 적용하기 위해서는 style속성에 객체 형태의 attribute를 추가해야한다. -->
+    <div id='root'></div>
+    
+    <script type='text/babel'>
+        /* 스타일을 적용하기 위한 객체의 속성명은 카멜케이스로 작성해야한다.
+            예) background-color -> backgroundColor
+            속성값은 문자열 혹은 숫자 형태로 작성해야 한다.
+        */
+       const style={
+            backgroundColor: 'black',
+            color: 'white',
+            cursor: 'pointer',
+            textAlign: 'center',
+            padding: 20    // 단위를 작성하려면 문자열로 시작하지만 단위를 생략하면 숫자만 사용(생략시 px)
+       }
+
+       const element = (
+            <>
+                <h1 style= {style}>Hello World</h1>
+                <h3>inline styling test</h3>
+            </>
+       );
+
+       ReactDOM.createRoot(document.getElementById('root')).render(element);
+    </script>
+</body>
+</html>

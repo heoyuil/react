@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 리액트 공식 사이트의 문서에서 React cdn을 추가한다
+        리액트는 라이브러리이기 때문에 js파일을 다운받거나 cdn으로 추가하면 사용이 가능하다.
+    -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script>
+        /*
+        React.craeteElement
+        첫번째 인자는 만들려는 엘리먼트의 타입을 문자열로 정의
+        두번째 인자는 앨리먼트의 프로퍼티를 표현한다
+        세벉째 인자는 앨리먼틔 자식노드를 표현한다
+        <h1 id='greeting'>hello world!</h1>
+
+        */
+        const greetingElement = React.createElement('h1',{id: 'greeting'}, 'hello world!');
+        const textElement = React.createElement('h3',{id: 'name'}, '안녕하세요 홍길동입니다.!');
+        /* 리액트 앨리먼트와 그 모든 자식 앨리머트를 함께 랜더링하기 위한 함수
+            첫번째 인자는 리액트 앨리먼트이다
+            두번째 인자느 랜더링이 일어날 대상 DOM노드이다.
+         */
+        // ReactDOM.render(
+        //     greetingElement,
+        //     document.getElementById('root')
+        // );
+        /* 16버전 이전의 리액트는 한 앨리먼트만 랜더링 할 수 있엇지만
+        이후 버전에서는 배열을 랜더링 할 수도 있다.*/
+        ReactDOM.render(
+            [greetingElement, textElement],
+            document.getElementById('root')
+        )
+    
+    </script>
+</body>
+</html>

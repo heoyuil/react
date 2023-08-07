@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <!--
+
+        JSX란?
+        createElement를 이용해 앨리먼트를 정의하면 복잡하기도 하고 가동성도 좋지 않다.
+        그래서 리액트 팀은 ReactElement를 정의하는 간단한 방법으로 JSX문법을 제공한다.
+        자바스크립트를 확장한 문법으로, ReactElement를 xml문법형식으로 정의할수 있는 방법이다.
+
+        단, JSX는 공식적인 자바스크립트 문법이 아니다. 바벨이라는 트랜스컴파일링 둘이 필요하다.
+        -> 바벨은 ES6 + EX next 문법을 ES5문법으로 변환해주는 도구이다.
+        -> JSX를 순수 리액트로 변환해주는 기능이 포함되어 있다.
+
+        바벨을 적용하는 간단한 방법(CDN) - unpkg에서 제공하는 cdn사용
+        1. 바벨 CDN을 추가
+        2. script태그에 type속성에 text/babel 속성값을 추가한다.
+    -->
+    <div id="root"></div>
+    <script type="text/babel">
+        const helloWorld = <h1>Hello World</h1>;
+        /* 17 버전*/
+        // ReactDOM.render(helloWorld, document.getElementById('root'));
+        
+        /* 18 버전*/
+        ReactDOM.createRoot(document.getElementById('root')).render(helloWorld);
+  </script>
+</body>
+</html>
