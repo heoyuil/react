@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script crossorigin src='https://unpkg.com/react@18/umd/react.development.js'></script>
+    <script crossorigin src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'></script>
+    <script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
+
+</head>
+
+<body>
+    <div id='root'></div>
+
+    <script type='text/babel'>
+
+        class ErrorBoundary extends React.Component {
+
+            state = {
+                hasError: false
+            }
+            /* 1. 자손 컴포넌트에서 오류가 발생했을때 호출된다*/ 
+            static getDerivedStateFromError(error){
+                /*
+                    이 메소드는 매개변수로 오류를 전달받고, 갱신된 state값을 반드시 반환해야한다. 
+                    -> 주의할 점은 render단계에서 호출되기 때문에 부수적인 효과를 여기서는 발생시키면 안된다.
+                */
+               console.log('getDerivedStateFromError');
+               return { hasError: true};
+            }
+
+            /* 2. 자손 컴포넌트에서 오류가 발생했을 때 호출된다*/
+            componentDibCatch(error, info){
+
+                /*
+                    error : 발생한 오류
+                    info : 어떤 컴포넌트가 오류가 발생했는지에 대한 정보를 포함한 객체
+
+                    해당 메소드는 커밋단계에서 호출되기 때문에 부수효과를 발생시켜도 된다. 
+                    예) 오류 로그들을 기록하는 특정 메소드를 호출한다던지의 일
+                */
+               console.log('componentDibCatch');
+               console.log(error, info);
+            }
+            render(){
+                if(this.state.hasError){
+                    return <h1>에러가 발생했습니다</h1>
+                }
+                return this.props.children;
+            }
+            
+        }
+
+        class TimePrinter extends React.Component{
+            state = {
+                now: new Date().toLocaleTimeString()
+            }
+            render(){
+                return (
+                    <>
+                        <button
+                            onClick={()=> this.setState({now: new Date().toLocaleTimeString()})}
+                        >
+                            현재 시간 확인하기
+                            </button>
+                            <h1>{this.state.now}</h1>
+                    </>
+                )
+            }
+        }
+
+        class App extends React.Component{
+            render(){
+                return (
+                    <>
+                        <ErrorBoundary>
+                        <TimePrinter />
+                        </ErrorBoundary>
+                    </>
+                )
+            }
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+    </script>
+</body>

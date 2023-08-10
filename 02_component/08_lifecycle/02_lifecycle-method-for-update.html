@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script crossorigin src='https://unpkg.com/react@18/umd/react.development.js'></script>
+    <script crossorigin src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'></script>
+    <script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
+
+</head>
+
+<body>
+
+    <!--
+        컴포넌트 업데이트 생명주기에 대한 업데이트 기준 크게 4가지로 나뉜다.
+        1. props 변경
+        2. state 변경
+        3. 부모컴포넌트 리렌더링
+        4. this.forceUpdate로 강제로 랜더링 트리거 (render내에서는 가급적 사용하지 않아야 한다....그리고 사실상 쓸일은 거의 없다.)
+
+        getDerivedStateFromProps => 
+    -->
+    <div id='root'></div>
+
+    <script type='text/babel'>
+        class TimePrinter extends React.Component {
+
+            state ={
+                now: new Date().toLocaleTimeString()
+            }
+
+            /* 1. props에 있는 값을 state에 넣을 때 사용하는 메소드 */
+            static getDerivedStateFromProps(nextProps, prevState) {
+                console.log('getDerivedStateFromProps');
+                return null;
+            }
+
+            /* 2. 컴포너트가 리렌더링을 할 것인지 말것인지를 결정하는 메소드 */
+            shouldComponentUpdate(nextProps, nextState){
+
+                /* 자주 사용되지는 않는 생명주기 메소드이다. 주로 사용하는 용도는 성능 최적화를 목적으로 하며
+                    상황에 따라 리렌더링을 방지할 목적으로 사용한다.
+                */
+                console.log('shouldComponentUpdate');
+                console.log(nextProps);         // 리렌더링 시 변경된 props값
+                console.log(nextState);         // 리렌더링 시 변경된 state값
+
+                // return false; // 업데이트 과정은 여기서 중단된다.
+                return true;
+            }
+
+            /* 3. 컴포넌트를 랜더링하는 메소드 */
+            render() {
+               
+                console.log('render');
+
+                return (
+                    <>
+                        <button
+                            onClick={() => this.setState({now : new Date().toLocaleTimeString()})}
+                        >
+                            현재 시간 확인하기
+                        </button>
+                    </>
+                )
+            }
+
+            /* 4. 컴포넌트의 변화를 실제 DOM에 반영하기 직전에 호출하는 메소드 */
+            getSnapshotBeforeUpdate(prevProps, prevState){
+
+                /*
+                    render에서 만들어진 결과물이 브라우저에 실제 반영되기 직전에 호출이되며 해당 메소드의 반환값은
+                    componentDidUpdate에서 전달받을 수 있다.
+                    -> 주로 업데이트하기 직전의 값을 참고할 일이 있을 때 활용(예: 스크롤바 위치 유지)
+                */
+                console.log('getSnapshotBeforeUpdate');
+                console.log('prevProps : ', prevProps);
+                console.log('prevState : ', prevState);
+
+                // return null;
+
+                return {
+                    message: '스냅샷입니다.' // componentDidUpdate의 snapshot으로 전달되는지 확인용
+                }
+            }
+
+            /* 5. 컴포넌트 업데이트 작업이 끝난 후 호출하는 메소드 */
+            componentDidUpdate(prevProps, prevState, snapshot){
+
+                console.log('componentDidUpdate');
+                console.log(snapshot);
+            }
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<TimePrinter />);
+    </script>
+</body>
