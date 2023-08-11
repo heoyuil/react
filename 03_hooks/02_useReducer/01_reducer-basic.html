@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src='https://unpkg.com/react@18/umd/react.development.js'></script>
+    <script crossorigin src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'>
+    </script>
+    <script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
+</head>
+
+<body>
+    <div id='root'></div>
+    <!--
+        useResucer는 다양한 컴포넌트의 state를 업데이트 할 때 사용하는 hook이다
+        리듀서는 새로운 상태를 만들 때 반드 시 불변성을 지켜주어야한다.(기존 state의 값변경을 하지말고 새롭게 만든다.)
+
+        리듀서는 사용했을 떄 가장 큰 장점은 컴포넌트 업데이트 로직을 컴포넌트 밖으로 분리할 수 있다는 점
+        reducer,action,
+        dispatch(action) =====> reducer(state,action)
+                                            \|/
+                                            state
+    -->
+    <script type='text/babel'>
+        
+        const {useReducer } = React;
+        // reducer함수는 첫번째인자는 기본상태값, 두번쨰 인자는 업데이트를 위헤 필요한 정보를 담은 객체
+        function reducer(state, action){
+            switch(action.type){
+                case 'DECREMENT' : 
+                    return {value: state.value -1};
+                case 'INCREMENT' : 
+                    return {value: state.value +1};  
+                default : 
+                    return state;      
+            }
+
+        }
+
+        function Counter(){
+            /* useReducer함수의 처번째 인자는 reducer함수, 두번째 인자는 해당 reducer의 기본값을 의미한다. 
+    
+                state는 현재 상태, dispatch는 액션을 발생시키는 함수
+            */
+           
+            const [state, dispatch] = useReducer(reducer, {value : 0});
+       
+            return (
+                <>
+                    <h1>count : {state.value}</h1>
+                    <button onClick={() => dispatch({type: 'DECREMENT'})}>-1</button>
+                    <button onClick={() => dispatch({type: 'INCREMENT'})}>+1</button>
+                </>
+            )
+        }
+        ReactDOM.createRoot(document.getElementById('root')).render(<Counter />);        
+    </script>
+
+</body>
+
+</html>

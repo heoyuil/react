@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script crossorigin src='https://unpkg.com/react@18/umd/react.development.js'></script>
+    <script crossorigin src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'></script>
+    <script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
+
+</head>
+
+<body>
+    <div id='root'></div>
+
+    <script type='text/babel'>
+
+        const { useState, useEffect, useMemo } = React;
+
+        function App() {
+
+            const [number, setNumber] = useState(0);
+            const [isKorea, setIsKorea] = useState(true);
+
+            /* 1. 원시자료형으로 테스트 */
+            // const location = isKorea? '한국': '외국';
+
+            /* 2. 객체로만 변경 */
+            // const location = {
+            //     country: isKorea? '한국':'외국'
+            // }
+            /* 원시자료형형태와는 다르게 객체의 경우 App이 호출 될 때마다 지역변수가 초기화되면서 매번 새로운 객체를 만들기 때문에
+                속성값은 변경이 없더라도 매번 새로운 객체가 만들어지게 된다. 그래서~ 이문제를 해결하기위해서 useMemo를 사용해보자~
+            */
+
+            /* 3. 문제해결 */
+            const location = useMemo(() => {
+                return {
+                    country: isKorea? '한국': '외국'
+                }
+            },[isKorea])
+
+            useEffect(() => {
+
+                console.log('useEffect 호출됨.....');
+            },[location]);
+
+            return (
+                <>
+                    <h2>좋아하는 숫자를 입력해주세요</h2>
+                    <input 
+                        type="number"
+                        value={ number }
+                        onChange={ e => setNumber(e.target.value)} 
+                    />
+                    <hr/>
+                    <h2>지금 당신이 있는 위치는? </h2>
+                     {/* <p>국가 { location }</p> */}
+                    <p>국가 : { location.country } </p>
+                    <button onClick={ () => setIsKorea(!isKorea) }>국가 토글 하기</button>
+                </>
+            )
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+
+</html>
