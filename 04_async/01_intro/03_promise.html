@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- promise는 콜백지옥같은 코드가 형성되지 않게 하는 방안으로 ES6에 도입되었다.-->
+    <script>
+        function increase(number){
+            // new Promise(()=>{}) resovle는 성공, reject 실패를 의미
+            // console.log(new Promise((resolve, reject)=>{
+            //     console.log(resolve);
+            //     console.log(reject);
+            // }));
+            const promise = new Promise((resolve, reject)=>{
+                setTimeout(
+                    ()=>{
+                        const result = number +10;
+                        if(result > 50){
+                            const e = new Error('NumberTooBig');
+                            /* 실패시 결과값을 reject로 전달*/ 
+                            return reject(e);   
+                        }
+                        /*성공 시 결과 값을 resolve의 인자로 전달*/
+                        resolve(result);
+                    },
+                    1000
+                );
+            });
+            console.log(promise);
+            return promise;
+        }
+        /* promise에서 resolve함수로 전달한 값은 then으로 전달하는 콜뱍함수의 매개변수를 이용해서 받아올  수 있다.
+            여러 작업이 연달아서 일어난다고해서 콜백지옥이 생기는 것이 아닌 then으로 그 다음 작업을 설정하기 때문에
+            더 보기 좋다
+        */
+        increase(0)
+        .then(number => {
+            console.log(number);
+            return increase(number);
+        })
+        .then(number => {
+            console.log(number);
+            return increase(number);
+        })
+        .then(number => {
+            console.log(number);
+            return increase(number);
+        })
+        .then(number => {
+            console.log(number);
+            return increase(number);
+        })
+        .then(number => {
+            console.log(number);
+            return increase(number);
+        })
+        .catch(e=>{ // 에러가 발생하는 것을 catch에서 잡는다
+            console.log(e);
+        });
+        console.log('end');
+    </script>
+</body>
+</html>
