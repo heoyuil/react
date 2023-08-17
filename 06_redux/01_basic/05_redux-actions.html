@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script crossorigin src='https://unpkg.com/react@18/umd/react.development.js'></script>
+    <script crossorigin src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'></script>
+    <script src='https://unpkg.com/@babel/standalone/babel.min.js'></script>
+    <script src="https://unpkg.com/redux@4.2.1/dist/redux.js"></script>
+    <script src="https://unpkg.com/react-redux@8.1.2/dist/react-redux.js"></script>
+    <script src="https://unpkg.com/redux-actions@2.6.5/dist/redux-actions.js"></script>
+</head>
+
+<body>
+    <div id='root'></div>
+
+    <script type='text/babel'>
+
+        const { Provider, useSelector, useDispatch } = ReactRedux;
+        const { createStore } = Redux;
+        const { createAction, createActions, handleActions } = ReduxActions;
+
+        /* 초기값 */
+        const initialState = 0;
+
+        /* 액션 */
+        const INCREMENT = 'count/INCREASE';
+        const DECREMENT = 'count/DECREASE';
+
+        /*
+            createAction 사용
+            createAction 함수의 인자로 전달한 문자열은 리듀서로 전달되는 액션의 type속성값이된다. 
+            두 번째 인자는 콜백 함수 형태로 전달하며 return 값을 자동으로 payload라는 속성에 담는다.
+
+            콜백함수의매개변수는 dispatch 호출 시 인자로 호출하는 해당 액션 함수에 인자를 전달해서 payload에 담는 값을 조작할 수 있다.
+        */
+        // const increase = createAction(INCREMENT, (amount = 1) => ({ incrementValue: amount}));
+        // const decrease = createAction(DECREMENT, (amount = 1) => ({ decrementValue: amount}));
+
+        /*
+            createActions함수를 사용하면 여러 개의 액션 함수를 한번에 생성할 수도 있다.
+            접두사가 있기 때문에 대괄호를 이용해서 키 식별자를 작성한다.
+            생성되는 액션 함수는 actions.count.increase로 생성된다.
+
+            그래서 중첩 구조분해할당을 이용해서 함수를 꺼내서 쓸수있다.
+        */
+        const {
+            count: { increase, decrease},
+        } = createActions({
+            [INCREMENT]: (amount = 1) => ({ incrementValue: amount}),
+            [DECREMENT]: (amount = 1) => ({ decrementValue: amount})
+        })
+
+        /* reducer */
+        /*
+            리듀서의 첫번째 인자는 state를 전달받고,
+                    두번째 인자는 action을 전달받는데 
+                    중첩 구조분해 할당을 해서 꺼낸 payload값을 콜백 함수 안에서 사용할 수 있다.
+                    -> 이는 dispatch호출 시 전달된 action의 type과 일치하는 함수를 동작시킨다.
+        */
+       const reducer = handleActions({
+
+            [INCREMENT]: (state, { payload: { incrementValue }}) => {
+                return state + incrementValue;
+            },
+            [DECREMENT]: (state, { payload: { decrementValue }}) => {
+                return state - decrementValue;
+            }
+        },
+        initialState
+       )
+        /*--------------------------------------------------------------------------------------------*/
+        
+        function App() {
+
+            const count = useSelector((state) => state);
+            const dispatch = useDispatch();
+
+            const increaseCount = () => {
+                dispatch(increase());
+            }
+
+            const decreaseCount = () => {
+                dispatch(decrease());
+            }
+
+            return (
+                <>
+                    <h1>Count : { count }</h1>
+                    <button onClick={increaseCount}>1 증가</button>
+                    <button onClick={decreaseCount}>1 감소</button>
+                </>
+            )
+        }
+        const store = createStore(reducer);
+
+        ReactDOM.createRoot(document.getElementById('root')).render(
+            <Provider store={store}>
+                <App />
+            </Provider>
+        );
+    </script>
+</body>
+
+</html>
